@@ -1,0 +1,17 @@
+version: "3"
+
+services: 
+  minecraft-server:
+    build: 
+      context: .
+      args: 
+        RAM_AMOUNT: ${RAM_AMOUNT}
+    volumes: 
+      - .server-data:/server
+    ports: 
+      - 25565:25565
+      - 25575:25575
+    container_name: minecraft-server-docker
+    
+volumes: 
+  server-data:
