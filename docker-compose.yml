@@ -1,18 +1,23 @@
-version: "3"
-
-services: 
-  minecraft-server:
-    build: 
-      context: .
-      args: 
-        RAM_AMOUNT: ${RAM_AMOUNT}
-        SERVER: ${SERVER}
-    volumes: 
-      - .server-data:/server
-    ports: 
-      - 25565:25565
-      - 25575:25575
-    container_name: ${CONTAINER_NAME}
-    
-volumes: 
-  server-data:
+services:
+  mc:
+    image: itzg/minecraft-server:latest
+    container_name: mc-curseforge
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      MEMORY: "6G"                # 4G mínimo recomendado para modpacks
+      TYPE: "AUTO_CURSEFORGE"     # motor de auto-gestión de modpacks
+      CF_API_KEY: ${CF_API_KEY}
+      # Elige UNA de estas dos:
+      CF_SLUG: "all-the-mods-10"   # el "slug" del pack (parte de la URL)
+      # CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-8"
+      # (Opcional) Fijar una versión concreta del pack:
+      # CF_FILE_ID: "4248390"
+      # (Opcional) excluir mods solo-cliente problemáticos:
+      # CF_EXCLUDE_MODS: "xaeros-minimap,journeymap"
+    volumes:
+      - ./data:/data               # mundo y configs persistentes
+      # (Opcional) carpeta para descargas manuales si algún mod lo requiere:
+      # - ./downloads:/downloads
+    restart: unless-stopped
